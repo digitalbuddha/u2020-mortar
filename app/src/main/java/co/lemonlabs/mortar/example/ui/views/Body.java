@@ -4,32 +4,34 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.animation.BounceInterpolator;
+import android.view.animation.CycleInterpolator;
 import android.widget.FrameLayout;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import co.lemonlabs.mortar.example.ui.screens.NestedScreen;
 import mortar.Mortar;
 
-public class NestedChildView extends FrameLayout {
+public class Body extends FrameLayout {
 
-    private NestedScreen.ChildPresenter presenter;
+     @Inject
+     NestedScreen.ChildPresenter2 presenter;
+
+    @Inject Context context;
+
 
     private ObjectAnimator animator;
 
-    public NestedChildView(Context context, AttributeSet attrs) {
+    public Body(Context context, AttributeSet attrs) {
         super(context, attrs);
         Mortar.inject(context, this);
-    }
-
-    public void setPresenter(NestedScreen.ChildPresenter presenter) {
-        this.presenter = presenter;
-        presenter.takeView(this);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        presenter.takeView(this);
         ButterKnife.inject(this);
     }
 
@@ -48,9 +50,9 @@ public class NestedChildView extends FrameLayout {
     }
 
     private void createAnimation() {
-        animator = ObjectAnimator.ofFloat(this, "rotation", 360);
+        animator = ObjectAnimator.ofFloat(this, "rotation", 180);
         animator.setDuration(3600);
-        animator.setInterpolator(new BounceInterpolator());
+        animator.setInterpolator(new CycleInterpolator(5));
         animator.setRepeatMode(ValueAnimator.RESTART);
         animator.setRepeatCount(ValueAnimator.INFINITE);
     }

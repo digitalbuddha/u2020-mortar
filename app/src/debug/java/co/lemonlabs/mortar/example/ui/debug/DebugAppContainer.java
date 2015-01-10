@@ -33,10 +33,8 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.SocketAddress;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -451,17 +449,10 @@ public class DebugAppContainer implements AppContainer {
   private void setupBuildSection() {
     buildNameView.setText(BuildConfig.VERSION_NAME);
     buildCodeView.setText(String.valueOf(BuildConfig.VERSION_CODE));
-    buildShaView.setText(BuildConfig.GIT_SHA);
 
-    try {
       // Parse ISO8601-format time into local time.
       DateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
       inFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-      Date buildTime = inFormat.parse(BuildConfig.BUILD_TIME);
-      buildDateView.setText(DATE_DISPLAY_FORMAT.format(buildTime));
-    } catch (ParseException e) {
-      throw new RuntimeException("Unable to decode build time: " + BuildConfig.BUILD_TIME, e);
-    }
   }
 
   private void setupDeviceSection() {

@@ -12,7 +12,7 @@ public class Screen {
         this.transitions = transitions;
     }
 
-    public final int[] getTransitions() { return transitions; }
+    public final int[]  getTransitions() { return transitions; }
 
     public final void setViewState(SparseArray<Parcelable> viewStateToSave) {
         viewState = viewStateToSave;

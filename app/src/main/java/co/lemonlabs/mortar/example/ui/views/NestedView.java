@@ -16,7 +16,10 @@ public class NestedView extends FrameLayout {
 
     @Inject NestedScreen.Presenter presenter;
 
-    @InjectView(R.id.nested_child) NestedChildView childView;
+    @InjectView(R.id.nested_child)
+    Header childView;
+    @InjectView(R.id.nested_child2)
+    Body childView2;
 
     public NestedView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -28,7 +31,6 @@ public class NestedView extends FrameLayout {
         super.onFinishInflate();
         ButterKnife.inject(this);
         presenter.takeView(this);
-        childView.setPresenter(presenter.getChildPresenter());
     }
 
     @Override

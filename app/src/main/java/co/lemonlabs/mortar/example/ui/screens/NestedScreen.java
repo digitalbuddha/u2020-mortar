@@ -8,7 +8,8 @@ import javax.inject.Singleton;
 import co.lemonlabs.mortar.example.R;
 import co.lemonlabs.mortar.example.core.CorePresenter;
 import co.lemonlabs.mortar.example.core.android.ActionBarPresenter;
-import co.lemonlabs.mortar.example.ui.views.NestedChildView;
+import co.lemonlabs.mortar.example.ui.views.Header;
+import co.lemonlabs.mortar.example.ui.views.Body;
 import co.lemonlabs.mortar.example.ui.views.NestedView;
 import flow.Layout;
 import mortar.Blueprint;
@@ -31,7 +32,8 @@ public class NestedScreen implements Blueprint {
     @dagger.Module(
         injects = {
             NestedView.class,
-            NestedChildView.class
+            Header.class,
+            Body.class
         },
         addsTo = CorePresenter.Module.class,
         library = true
@@ -46,6 +48,7 @@ public class NestedScreen implements Blueprint {
     public static class Presenter extends ViewPresenter<NestedView> {
 
         @Inject ChildPresenter childPresenter;
+        @Inject ChildPresenter2 childPresenter2;
 
         private final ActionBarPresenter actionBar;
 
@@ -74,17 +77,34 @@ public class NestedScreen implements Blueprint {
 
         public void toggleChildAnimation() {
             childPresenter.toggleAnimation();
+            childPresenter2.toggleAnimation();
         }
 
-        public ChildPresenter getChildPresenter() {
-            return childPresenter;
+
+    }
+
+    @Singleton
+    public static class ChildPresenter extends ViewPresenter<Header> {
+
+        @Inject ChildPresenter() {
+        }
+
+        @Override
+        public void onLoad(Bundle savedInstanceState) {
+            super.onLoad(savedInstanceState);
+            if (getView() == null) return;
+            toggleAnimation();
+        }
+
+        public void toggleAnimation() {
+            getView().toggleAnimation();
         }
     }
 
     @Singleton
-    public static class ChildPresenter extends ViewPresenter<NestedChildView> {
+    public static class ChildPresenter2 extends ViewPresenter<Body> {
 
-        @Inject ChildPresenter() {
+        @Inject ChildPresenter2() {
         }
 
         @Override

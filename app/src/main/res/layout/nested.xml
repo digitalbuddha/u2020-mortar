@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
 
-    <co.lemonlabs.mortar.example.ui.views.NestedChildView
+    <co.lemonlabs.mortar.example.ui.views.Header
         android:id="@+id/nested_child"
         android:layout_width="150dp"
         android:layout_height="150dp"
@@ -20,6 +20,22 @@
             android:adjustViewBounds="true"
             android:src="@drawable/doge"/>
 
-    </co.lemonlabs.mortar.example.ui.views.NestedChildView>
+    </co.lemonlabs.mortar.example.ui.views.Header>
+    <co.lemonlabs.mortar.example.ui.views.Body
+        android:id="@+id/nested_child2"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center_vertical"
+        >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:src="@drawable/doge"/>
+
+    </co.lemonlabs.mortar.example.ui.views.Body>
 
 </co.lemonlabs.mortar.example.ui.views.NestedView>
+

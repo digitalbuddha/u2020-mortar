@@ -1,32 +1,16 @@
 apply plugin: 'idea'
 apply plugin: 'com.android.application'
-apply plugin: 'spoon'
-apply plugin: 'hugo'
 
 
-// Manifest version information!
-def versionMajor = 1
-def versionMinor = 0
-def versionPatch = 0
-def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
-project.ext.versionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
-project.ext.versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
-
-def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
-def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
-
-def isTravis = "true".equals(System.getenv("TRAVIS"))
-def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.14.1'
+        classpath 'com.android.tools.build:gradle:1.0.0'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.1.+'
-        classpath 'com.stanfy.spoon:spoon-gradle-plugin:0.10.+'
     }
 }
 
@@ -38,21 +22,13 @@ android {
         minSdkVersion 14
         targetSdkVersion 20
 
-        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
-        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
-        buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
-        buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
-        buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
 
         testApplicationId "co.lemonlabs.mortar.tests"
         testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
 
     }
-    dexOptions {
-        // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
-        preDexLibraries = preDexEnabled && !isTravis
-    }
+
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -66,8 +42,6 @@ android {
 
     buildTypes {
         release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
 }
@@ -101,33 +75,3 @@ dependencies {
     androidTestCompile 'com.squareup.spoon:spoon-client:1.1.1'
 }
 
-spoon {
-    debug = true
-    noAnimations = true
-
-    if (project.hasProperty('spoonClassName')) {
-        className = project.spoonClassName
-
-        if (project.hasProperty('spoonMethodName')) {
-            methodName = project.spoonMethodName
-        }
-    }
-
-    if (project.hasProperty('spoonTestSize')) {
-        testSize = project.spoonTestSize
-    }
-}
-
-idea {
-    module {
-        downloadJavadoc = true
-        downloadSources = true
-    }
-}
-
-android.applicationVariants.all { variant ->
-    def apk = variant.outputFile
-    def newName = "ll-mortar-${variant.name}-v${project.versionName}.apk"
-
-    variant.outputFile = new File(apk.parentFile, newName)
-}
